@@ -1,1 +1,1 @@
-hi from Pingular
+Repeatedly pings a set of machines and reports on the result of each ping. Used for monitoring machine uptime.
