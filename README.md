@@ -1,2 +1,1 @@
-hi
-local
+hi from Pingular
