@@ -1,13 +1,7 @@
 {
     "hosts": 
     [ 
-        "mikepidev3",
-        "mikepidev",
-        "relentless",
-        "hyperion",
-        "hakumennomono",
-        "laurelin",
-        "glory.guest.corp.microsoft.com",
-        "mikepi-mac"
+        "www.microsoft.com",
+        "www.sfu.ca"
     ]
 }
