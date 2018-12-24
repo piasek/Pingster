@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace Pingular
 {
@@ -9,7 +8,7 @@ namespace Pingular
         static void Main(string[] args)
         {
             var config = Configuration.Settings.GetSettings();
-            
+   
             foreach(var host in config.Hosts)
             {
                 var ping = new HostPing(host, 5000);
@@ -27,16 +26,17 @@ namespace Pingular
             var pingerInfo = pingers[args.Host];
             pingerInfo.LastPingEventArgs = args;
             pingerInfo.LastPingTime = DateTime.Now;
+            
+            Console.Clear();
+
             Refresh();
         }
 
         private static object consoleLock = new object();
         private static void Refresh()
         {
-            
             lock(consoleLock)
             {
-                Console.Clear();
                 Console.SetCursorPosition(0, 0);
 
                 foreach (var host in pingers.Keys)
@@ -46,27 +46,21 @@ namespace Pingular
                     var lastPingTime = pingerInfo.LastPingTime;
                     if (lastPingEventArgs == null)
                     {
-                        Console.WriteLine($"{host,-30} waiting..."); 
+                        ConsoleExtensions.WriteFullLine($"{host,-30} waiting...", ConsoleColor.Gray);
                     }
                     else if (lastPingEventArgs.Success)
                     {
-                        var color = Console.ForegroundColor;
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"{host,-30} [{lastPingTime.TimeOfDay}] {lastPingEventArgs.Duration} ms");
-                        Console.ForegroundColor = color;
+                        ConsoleExtensions.WriteFullLine($"{host,-30} [{lastPingTime.TimeOfDay}] {lastPingEventArgs.Duration} ms", ConsoleColor.Green);
                     }
                     else
                     {
-                        var color = Console.ForegroundColor;
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"{host,-30} [{lastPingTime.TimeOfDay}] {lastPingEventArgs.Message}");
-                        Console.ForegroundColor = color;
+                        ConsoleExtensions.WriteFullLine($"{host,-30} [{lastPingTime.TimeOfDay}] {lastPingEventArgs.Message}", ConsoleColor.Red);
                     }
                 }
 
                 Console.Write("Press Enter to quit...");
             }
-        }        
+        }
 
         private class PingerInfo
         {
@@ -82,5 +76,49 @@ namespace Pingular
             public DateTime LastPingTime;
         }
         static Dictionary<string, PingerInfo> pingers = new Dictionary<string, PingerInfo>();
+    }
+
+    public static class ConsoleExtensions
+    {
+        public static void WriteFullLine(string s, ConsoleColor c)
+        {
+            using (new ColorScope(c))
+            {
+                var sb = new System.Text.StringBuilder(s, Console.BufferWidth);
+                sb.Append(' ', Console.BufferWidth - s.Length - 1);
+                Console.WriteLine(sb);
+            }
+        }
+
+        private class ColorScope : IDisposable
+        {
+            public ColorScope(ConsoleColor color)
+            {
+                previousColor = Console.ForegroundColor;
+                Console.ForegroundColor = color;
+            }
+
+            void IDisposable.Dispose()
+            {
+                Dispose(true);
+            }
+
+            ~ColorScope()
+            {
+                Dispose(false);
+            }
+
+            private void Dispose(bool disposing)
+            {
+                Console.ForegroundColor = previousColor;
+
+                if (disposing)
+                {
+                    System.GC.SuppressFinalize(this);
+                }
+            }
+
+            private ConsoleColor previousColor;
+        }        
     }
 }
