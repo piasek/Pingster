@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace Pingular.Configuration
 {
@@ -20,8 +19,7 @@ namespace Pingular.Configuration
 
             var hosts = new List<string>();
             var sr = new StreamReader(
-                Path.Combine(
-                    Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "hosts.txt"));
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "hosts.txt"));
 
             string line;
             while ((line = sr.ReadLine()) != null) 
