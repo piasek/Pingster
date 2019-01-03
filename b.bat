@@ -1,1 +1,1 @@
-dotnet build -r win10-x64 Pingular.csproj 
+dotnet build -c Release -r win-x64 Pingular.csproj 

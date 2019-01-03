@@ -1,6 +1,7 @@
 using System;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Binder;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace Pingular.Configuration
 {
@@ -15,13 +16,20 @@ namespace Pingular.Configuration
 
         public static Settings GetSettings()
         {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("config.json", optional:true, reloadOnChange:false)
-                .Build();
-
             var settings = new Settings();
-            configuration.Bind(settings);
 
+            var hosts = new List<string>();
+            var sr = new StreamReader(
+                Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "hosts.txt"));
+
+            string line;
+            while ((line = sr.ReadLine()) != null) 
+            {
+                hosts.Add(line);
+            }
+
+            settings.Hosts = hosts.ToArray();
             return settings;
         }
     }

@@ -9,6 +9,7 @@ namespace Pingular
         {
             var config = Configuration.Settings.GetSettings();
    
+            Console.Clear();
             foreach(var host in config.Hosts)
             {
                 var ping = new HostPing(host, 5000);
@@ -26,8 +27,6 @@ namespace Pingular
             var pingerInfo = pingers[args.Host];
             pingerInfo.LastPingEventArgs = args;
             pingerInfo.LastPingTime = DateTime.Now;
-            
-            Console.Clear();
 
             Refresh();
         }

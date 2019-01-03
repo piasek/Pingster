@@ -2,10 +2,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <TrimUnusedDependencies>true</TrimUnusedDependencies>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="config.json" CopyToOutputDirectory="PreserveNewest"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="*"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="*"/>
+    <None Update="hosts.txt" CopyToOutputDirectory="PreserveNewest" />
+    <PackageReference Include="ILLink.Tasks" Version="0.1.5-preview-1841731" />
+    <PackageReference Include="Microsoft.Packaging.Tools.Trimming" Version="1.1.0-preview1-26619-01" />
+    <LinkerRootAssemblies Include="Pingular" />
   </ItemGroup>
 </Project>
